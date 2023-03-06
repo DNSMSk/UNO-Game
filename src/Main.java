@@ -2,9 +2,21 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        generateOfDeck();
+
+    }
+
+    private static void generatePlayers(){
+
+    }
+    private static void generateOfDeck() {
         List<Cards> deckOfCards = new ArrayList<>();
         for (Cards.Face face : Cards.Face.values()) {
             for (Cards.Color color : Cards.Color.values()) {
+                if (face == Cards.Face.BLOCK || face == Cards.Face.REVERSE || face == Cards.Face.PLUS_TWO ){
+                    deckOfCards.add(new Cards(face, color));
+                    deckOfCards.add(new Cards(face, color));
+                } else
                 if (face == Cards.Face.WHITE_CHANGE_COLOR || face == Cards.Face.CHANGE_COLOR || face == Cards.Face.PLUS_TEN) {
                     deckOfCards.add(new Cards(face, null));
                 } else {
@@ -15,8 +27,8 @@ public class Main {
         for (int i = 0; i < deckOfCards.size(); i++) {
             System.out.println(deckOfCards.get(i));
         }
-
     }
+
 
     public record Cards(Main.Cards.Face face, Main.Cards.Color color) implements Comparable<Cards> {
 
@@ -39,35 +51,6 @@ public class Main {
                     return String.valueOf(color).compareTo(String.valueOf(card.color()));
                 }
                 return 0;
-           /* Color[] cValues = Color.values();
-            List<Color> colors = Arrays.asList(cValues);
-
-
-
-            if(faces.indexOf(this.face) == faces.indexOf(card.getFace()) || colors.indexOf(this.color) == colors.indexOf(card.getColor())) {
-                switch (faces.indexOf(this.face)) {
-                    case 9:
-                        return 3;
-                    case 10:
-                        return 4;
-                    case 11:
-                        return 2;
-                    default:
-                        return 1;
-                }
-            } else {
-                switch (faces.indexOf(this.face)) {
-                    case 12:
-                        return 10;
-                    case 13:
-                        return 6;
-                    case 14:
-                        return 7;
-                    default:
-                        return 0;
-
-                }
-            }*/
             }
 
             @Override

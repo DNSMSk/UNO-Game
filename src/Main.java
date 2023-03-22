@@ -3,31 +3,42 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        generateOfDeck();
         System.out.println("How many players? : ");
-        generatePlayers(scanner.nextInt());
-
+        int countOfPlayers = scanner.nextInt();
+        Stack<Player> players = generatePlayers(countOfPlayers, generateOfDeck());
+        boolean isGameOver = false;
+        while (!isGameOver) {
+            if(countOfPlayers==1){
+                isGameOver=true;
+            }
+            for (Player player :players ) {
+                scanner.nextLine();
+                System.out.println(player.name+"'s turn\n"+player.Hand);
+                if(scanner.nextLine().equalsIgnoreCase("y")){
+                    System.out.println("Enter a card index to remove");
+                    player.Hand.remove(scanner.nextInt());
+                }
+                if (player.Hand.size()==0){
+                    countOfPlayers--;
+                    players.remove(player);
+                }
+            }
+        }
     }
 
-    public static void generatePlayers(int d) {
-        Stack<Cards> deckOfCards = new Stack<>();
+    public static Stack<Player> generatePlayers(int d, Stack<Cards> cardsDeck) {
         Scanner scanner = new Scanner(System.in);
-        deckOfCards.addAll(generateOfDeck());
         Stack<Player> players = new Stack<>();
-        for (int i =0;i<d; i++){
-        players.push(new Player());
-        settingsOfPlayer(deckOfCards, scanner, players.get(i));
+        for (int i = 0; i < d; i++) {
+            players.push(new Player());
+            System.out.println("Введите имя: ");
+            players.get(i).setName(scanner.nextLine());
+            for (int j = 0; j < 7; j++) {
+                players.get(i).Hand.push(cardsDeck.pop());
+            }
+            System.out.printf("%s  has a   %s\n", players.get(i).getName(), players.get(i).Hand);
         }
-    }
-
-    private static void settingsOfPlayer(Stack<Cards> deckOfCards, Scanner scanner, Player player) {
-        System.out.println("Введите имя: ");
-        player.setName(scanner.nextLine());
-        for (int i = 0; i < 7; i++) {
-            player.Hand.push(deckOfCards.pop());
-        }
-        System.out.printf("%s  has a   %s\n",player.getName(),player.Hand);
-
+        return players;
     }
 
     public static Stack<Cards> generateOfDeck() {
@@ -65,13 +76,12 @@ public class Main {
 
     }
 
-    public record Cards(Main.Cards.Face face, Main.Cards.Color color)  {
+    public record Cards(Main.Cards.Face face, Main.Cards.Color color) {
 
 
         private enum Face {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, BLOCK, PLUS_TWO, PLUS_TEN, CHANGE_COLOR, WHITE_CHANGE_COLOR}
 
         private enum Color {RED, GREEN, BLUE, YELLOW}
-
 
 
         @Override
